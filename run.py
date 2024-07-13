@@ -1,3 +1,3 @@
 import torch
-print('hi')
+print('version')
 print(torch.__version__)
