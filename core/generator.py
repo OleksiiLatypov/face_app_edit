@@ -4,6 +4,7 @@ import numpy as np
 from settings import Config
 
 import sys
+
 sys.path.append('stylegan2-ada-pytorch')
 
 

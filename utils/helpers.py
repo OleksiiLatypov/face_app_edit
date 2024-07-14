@@ -46,7 +46,7 @@ def convert_image(image, size):
     # change the order of channels
     image = image.permute(1, 2, 0)
     # renormalize
-    image = ((image + 1) * 127.5).clamp(0, 255)
+    image = ((image + 1) / 2 * 255).clamp(0, 255)
     # convert to NumPy
     image = image.cpu().numpy().astype('uint8')
     # convert to PIL
