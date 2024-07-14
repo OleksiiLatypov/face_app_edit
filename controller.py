@@ -36,15 +36,15 @@ class Controller:
         (also saves w vector)
         """
         # load z from path
-        z =
+        z = load_numpy(path, Config.generation.device)
         # get w from z
-        self.w =
+        self.w = self.generator.get_w(z, truncation_psi=psi)
         # get img from w
-        img =
+        img = self.generator.get_img(self.w)
         # convert image (use size=Config.gui.display_size)
-        img =
+        img = convert_image(img, size=Config.gui.display_size)
         # convert image to bits
-        img_bits =
+        img_bits = get_img_bits(img)
         return img_bits
 
     def generate_img_from_w_vec(self, path):
@@ -53,13 +53,13 @@ class Controller:
         (also saves w vector)
         """
         # load w from path
-        self.w =
+        self.w = load_numpy(path, Config.generation.device)
         # get img from w
-        img =
+        img = self.generator.get_img(self.w)
         # convert image (use size=Config.gui.display_size)
-        img =
+        img = convert_image(img, Config.gui.display_size)
         # convert image to bits
-        img_bits =
+        img_bits = get_img_bits(img)
         return img_bits
 
     def trasnform_img(self, directions, psi):
@@ -70,16 +70,16 @@ class Controller:
         @return: transformed image bits
         """
         # perform truncation
-        w_prime =
+        w_prime = self.generator.truncate_w(self.w, truncation_psi=psi)
         for direction, amount in directions.items():
             # shift
-            w_prime =
+            w_prime = self.shifter(w_prime, direction, amount)
         # generate the image
-        img =
+        img = self.generate_img_from_w_vec(w_prime)
         # convert image (use size=Config.gui.display_size)
-        img =
+        img = convert_image(img, Config.gui.display_size)
         # convert image to bits
-        img_bits =
+        img_bits = get_img_bits(img)
         return img_bits
 
     def read_path(self, path):
@@ -96,9 +96,9 @@ class Controller:
         Aligns the image using provided path and returns bits of aligned image and its path
         """
         # align the image
-        aligned_path =
+        aligned_path = align_face(path)
         # read image bit from the path
-        aligned_bits =
+        aligned_bits = self.read_path(aligned_path)
         return aligned_bits, aligned_path
 
     def project(self, path):
@@ -106,9 +106,9 @@ class Controller:
         Runs projection and returns bits of the generated image (also saves w vector)
         """
         # run projrction
-        img, self.w =
+        img, self.w = run_projection(path)
         # convert image (size = Config.gui.display_size)
-        img =
+        img = convert_image(img, size=Config.gui.display_size)
         # convert image to bits
-        projected_bits =
+        projected_bits = get_img_bits(img)
         return projected_bits
