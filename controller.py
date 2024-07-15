@@ -21,11 +21,11 @@ class Controller:
         # get z from seed
         z = self.generator.get_z(seed)
         # get w from z
-        self.w = self.generator.get_w(z, truncation_psi=psi)
+        self.w = self.generator.get_w(z, psi)
         # get img from w
         img = self.generator.get_img(self.w)
         # convert image (use size=Config.gui.display_size)
-        img = convert_image(img, size=Config.gui.display_size)
+        img = convert_image(img, Config.gui.display_size)
         # convert image to bits
         img_bits = get_img_bits(img)
         return img_bits
@@ -38,11 +38,11 @@ class Controller:
         # load z from path
         z = load_numpy(path, Config.generation.device)
         # get w from z
-        self.w = self.generator.get_w(z, truncation_psi=psi)
+        self.w = self.generator.get_w(z, psi)
         # get img from w
         img = self.generator.get_img(self.w)
         # convert image (use size=Config.gui.display_size)
-        img = convert_image(img, size=Config.gui.display_size)
+        img = convert_image(img, Config.gui.display_size)
         # convert image to bits
         img_bits = get_img_bits(img)
         return img_bits
@@ -70,7 +70,7 @@ class Controller:
         @return: transformed image bits
         """
         # perform truncation
-        w_prime = self.generator.truncate_w(self.w, truncation_psi=psi)
+        w_prime = self.generator.truncate_w(self.w, psi)
         for direction, amount in directions.items():
             # shift
             w_prime = self.shifter(w_prime, direction, amount)
@@ -105,10 +105,10 @@ class Controller:
         """
         Runs projection and returns bits of the generated image (also saves w vector)
         """
-        # run projrction
-        img, self.w = run_projection(path)
+        # run projection
+        img, self.w = run_projection(path, self.generator.G)
         # convert image (size = Config.gui.display_size)
-        img = convert_image(img, size=Config.gui.display_size)
+        img = convert_image(img, Config.gui.display_size)
         # convert image to bits
         projected_bits = get_img_bits(img)
         return projected_bits
