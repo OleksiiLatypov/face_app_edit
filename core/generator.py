@@ -22,7 +22,7 @@ class Generator:
         """
         w_avg = self.G.mapping.w_avg
         # perform truncation
-        w = truncation_psi * (w - w_avg) + w_avg
+        w = w_avg + (w - w_avg) * truncation_psi
         return w
 
     def get_z(self, seed):

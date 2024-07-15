@@ -7,10 +7,7 @@ class Shifter:
     def __init__(self, vectors_dir=Config.shifting.vectors_path, ext=Config.shifting.extension):
         self.fnames = [file for file in os.listdir(vectors_dir) if file.endswith(ext)]
         self.vectors = {}
-        print(self.fnames)
-        print(self.vectors)
         for file in self.fnames:
-            print(file)
             path = os.path.join(vectors_dir, file)
             name = file.replace(ext, '')
             # laod numpy vectors and pass to device
@@ -30,5 +27,3 @@ class Shifter:
         # perform shifting
         w = w + self.vectors[direction] * amount
         return w
-
-
