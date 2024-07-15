@@ -1,6 +1,6 @@
 numpy
 torch==1.7.1
-pillow
+pillow==9.5.0
 pysimplegui
 click
 requests
